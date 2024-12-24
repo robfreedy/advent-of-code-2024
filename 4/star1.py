@@ -4,28 +4,27 @@ from prefect import flow, get_run_logger, task
 def read_input():
     list1 = []
     with open("input.txt", "r") as file:
-        for line in file.readlines():
-            list2 = list(line)
-            list2.pop()
+        for line in file:
+            list2 = list(line.strip())
             list1.append(list2)
     return list1
 
 @flow
 def day4_star1():
     logger = get_run_logger()
-    # grid = read_input()
-    grid = [
-        list("MMMSXXMASM"),
-        list("MSAMXMSMSA"),
-        list("AMXSXMAAMM"),
-        list("MSAMASMSMX"),
-        list("XMASAMXAMM"),
-        list("XXAMMXXAMA"),
-        list("SMSMSASXSS"),
-        list("SAXAMASAAA"),
-        list("MAMMMXMMMM"),
-        list("MXMXAXMASX")
-    ]
+    grid = read_input()
+    # grid = [
+    #     list("MMMSXXMASM"),
+    #     list("MSAMXMSMSA"),
+    #     list("AMXSXMAAMM"),
+    #     list("MSAMASMSMX"),
+    #     list("XMASAMXAMM"),
+    #     list("XXAMMXXAMA"),
+    #     list("SMSMSASXSS"),
+    #     list("SAXAMASAAA"),
+    #     list("MAMMMXMMMM"),
+    #     list("MXMXAXMASX")
+    # ]
     num_xmas = 0
 
     rows = len(grid)
@@ -39,7 +38,7 @@ def day4_star1():
     # Check horizontally
     for r in range(rows):
         for c in range(cols - len(target) + 1):
-            if c + len(target) < cols:
+            if c + len(target) <= cols:
                 word = ''.join(grid[r][c:c + len(target)])
                 if word == target:
                     num_xmas += 1
@@ -49,7 +48,7 @@ def day4_star1():
     # Check vertically
     for c in range(cols):
         for r in range(rows - len(target) + 1):
-            if r + len(target) < cols:
+            if r + len(target) <= cols:
                 word = ''.join(grid[r + i][c] for i in range(len(target)))
                 if word == target:
                     num_xmas += 1
@@ -59,7 +58,7 @@ def day4_star1():
     # Check diagonally (top-left to bottom-right)
     for r in range(rows - len(target) + 1):
         for c in range(cols - len(target) + 1):
-            if c + len(target) < cols and r + len(target) < rows:
+            if c + len(target) <= cols and r + len(target) <= rows:
                 word = ''.join(grid[r + i][c + i] for i in range(len(target)))
                 if word == target:
                     num_xmas += 1
